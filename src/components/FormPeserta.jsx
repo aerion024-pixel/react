@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 const FormPeserta = ({ onSimpan, onCancel, pesertaEdit }) => {
     const [Nama, setNama] = useState("")
     const [Jurusan, setJurusan] = useState("")
+    const [error, setError] = useState("")
 
     //useEffect: hasil request dari server menghasilkan sebuah data, hanya sekali di render
     //menggunakan arrow function, useEffect(() =>)
@@ -21,6 +22,10 @@ const FormPeserta = ({ onSimpan, onCancel, pesertaEdit }) => {
 
     const handleSimpan = (e) => {
         e.preventDefault()
+        if (!Nama.trim() || !Jurusan.trim()) {
+            setError("Mohon isi nama dan jurusan")
+            return
+        }
         //jika dia edit
         //jika dia tambah
 
