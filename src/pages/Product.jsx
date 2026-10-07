@@ -1,41 +1,47 @@
 import { useState } from "react"
-import { Card, Form, Button, CardBody, Table, Modal } from "react-bootstrap"
-import AppModal from "../../components/AppModal"
+import { Card, Table, Form, Modal, Button } from "react-bootstrap"
 
 const dataUser = [
     {
         id: 1,
-        name: "Dian",
-        email: "dian21@gmail.com",
-        password: 12345678
+        name: "Salt bread",
+        quantity: "",
+        price: 50000,
+        status: "active"
     },
     {
         id: 2,
-        name: "ian",
-        email: "ian21@gmail.com",
-        password: 12345678
+        name: "Dubai Chewy",
+        quantity: "",
+        price: 48000,
+        status: "active"
     },
     {
         id: 3,
-        name: "rian",
-        email: "rian21@gmail.com",
-        password: 12345678
+        name: "Banhmi",
+        quantity: "",
+        price: 60000,
+        status: "active"
     }
 ]
 
-const ListUser = () => {
+
+const Produk = () => {
     const _initForm = {
         id: null,
         name: "",
-        email: "",
-        password: "",
-        status: 'Active'
+        quantity: "",
+        price: "",
+        status: "active"
     }
 
+    // useState
     const [showModal, setShowModal] = useState(false)
     const [users, setUsers] = useState(dataUser)
     const [formData, setFormData] = useState(_initForm)
     const [isEdit, setIsEdit] = useState(false)
+
+    // 
 
     const handleOpenModal = () => {
         setShowModal(true)
@@ -54,6 +60,7 @@ const ListUser = () => {
     }
 
     const handleChange = (e) => {
+        console.log(e.target.name, e.target.value)
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
@@ -64,7 +71,8 @@ const ListUser = () => {
         e.preventDefault()
 
         if (isEdit) {
-            setUsers(users.map((user) => (user.id === formData.id ? formData : u)))
+            console.log({ formData })
+            setUsers(users.map((user) => (user.id === formData.id ? formData : user)))
         } else {
             const newUser = {
                 ...formData, id: Date.now(),
@@ -81,14 +89,12 @@ const ListUser = () => {
             setUsers(users.filter((u) => u.id !== id))
         }
     }
-    // filter:user
-
-
+    // 
 
     return (
         <>
             <Card className="shadow-sm border-0">
-                <CardBody>
+                <Card.Body>
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <div>
                             <h4 className="mb-0 fw-bold">Data User</h4>
@@ -101,10 +107,11 @@ const ListUser = () => {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>name</th>
+                                <th>quantity</th>
+                                <th>price</th>
+                                <th>status</th>
+                                <th>action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -113,8 +120,9 @@ const ListUser = () => {
                                 <tr key={index}>
                                     <td>{index + 1}</td>
                                     <td>{user.name}</td>
-                                    <td>{user.email}</td>
-                                    <td>active</td>
+                                    <td>{user.quantity}</td>
+                                    <td>{user.price}</td>
+                                    <td>{user.status}</td>
                                     <td>
                                         <Button onClick={() => handleEditModal(user)} variant="warning" size="sm" className="me-2">Edit</Button>
                                         <Button onClick={() => handleDelete(user.id)} variant="danger" size="sm" className="me-2">Delete</Button>
@@ -123,10 +131,10 @@ const ListUser = () => {
                             ))}
                         </tbody>
                     </Table>
-                </CardBody>
+                </Card.Body>
             </Card>
 
-            {/* <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Create New User</Modal.Title>
                 </Modal.Header>
@@ -134,19 +142,27 @@ const ListUser = () => {
                     <Form onSubmit={handleSubmit}>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
+                            <Form.Label>name</Form.Label>
                             <Form.Control type="text" name="name" placeholder="Enter Your Name" required
                                 value={formData.name} onChange={handleChange}></Form.Control>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" name="email" placeholder="Enter Your Email" required
-                                value={formData.email} onChange={handleChange}></Form.Control>
+                            <Form.Label>quantity</Form.Label>
+                            <Form.Control type="text" name="quantity" placeholder="Jumlah yang anda inginkan" required
+                                value={formData.quantity} onChange={handleChange}></Form.Control>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" name="password" placeholder="Enter Your Password" required
-                                value={formData.password} onChange={handleChange}></Form.Control>
+                            <Form.Label>price</Form.Label>
+                            <Form.Control type="text" name="price" placeholder="Masukkan harga" required
+                                value={formData.price} onChange={handleChange}></Form.Control>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>status</Form.Label>
+                            <Form.Select name="status" aria-label="Default select example" value={formData.status} onChange={handleChange}>
+                                <option value="0">Open this select menu</option>
+                                <option value="active">active</option>
+                                <option value="in active">in active</option>
+                            </Form.Select>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
@@ -158,33 +174,10 @@ const ListUser = () => {
                         Save Changes
                     </Button>
                 </Modal.Footer>
-            </Modal> */}
+            </Modal>
 
-            <AppModal show={showModal}
-                onClose={handleCloseModal}
-                title={isEdit ? "Edit User" : "Create New User"}
-                onSubmit={handleSubmit}
-                submitLabel={isEdit ? 'Save Change' : 'Save'}
-            >
-                
-                    <Form.Group className="mb-3">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" name="name" placeholder="Enter Your Name" required
-                            value={formData.name} onChange={handleChange}></Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" name="email" placeholder="Enter Your Email" required
-                            value={formData.email} onChange={handleChange}></Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" name="password" placeholder="Enter Your Password" required
-                            value={formData.password} onChange={handleChange}></Form.Control>
-                    </Form.Group>
-                
-            </AppModal>
         </>
     )
 }
-export default ListUser
+
+export default Produk;

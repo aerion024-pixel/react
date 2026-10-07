@@ -13,6 +13,7 @@ import Login from './pages/login.pages'
 import MainLayout from './pages/Main.Layout'
 import Dashboard from './pages/Dashboard'
 import ListUser from './pages/user/List'
+import Produk from './pages/Product'
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/Dashboard" element={<Dashboard />}></Route>
           <Route path="/User" element={<ListUser />}></Route>
+          <Route path='/Produk' element={<Produk />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
