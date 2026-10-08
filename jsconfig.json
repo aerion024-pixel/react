@@ -6,5 +6,17 @@
     },
     "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "components/button.jsx",
+    "components/card.jsx",
+    "components/dialog.jsx",
+    "components/input.jsx",
+    "components/label.jsx",
+    "components/separator.jsx",
+    "components/sheet.jsx",
+    "components/sidebar.jsx",
+    "components/skeleton.jsx",
+    "components/tooltip.jsx"
+  ]
 }

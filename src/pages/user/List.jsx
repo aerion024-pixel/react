@@ -1,27 +1,33 @@
-import { useState } from "react"
-import { Card, Form, Button, CardBody, Table, Modal } from "react-bootstrap"
-import AppModal from "../../components/AppModal"
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Button } from "@/components/ui/button"
+import AppModal from "@/components/AppModal";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
-const dataUser = [
+// import { Card, Form, Button, Table, Modal } from "react-bootstrap";
+// import AppModal from "../../components/AppModal";
+
+const dataUsers = [
     {
         id: 1,
-        name: "Dian",
-        email: "dian21@gmail.com",
-        password: 12345678
+        name: "Reza",
+        email: "ribrahim50@gmail.com",
+        password: 12345678,
     },
     {
         id: 2,
-        name: "ian",
-        email: "ian21@gmail.com",
-        password: 12345678
+        name: "Budi",
+        email: "budi@gmail.com",
+        password: 12345678,
     },
     {
         id: 3,
-        name: "rian",
-        email: "rian21@gmail.com",
-        password: 12345678
-    }
-]
+        name: "ani",
+        email: "ani@gmail.com",
+        password: 12345678,
+    },
+];
 
 const ListUser = () => {
     const _initForm = {
@@ -29,162 +35,197 @@ const ListUser = () => {
         name: "",
         email: "",
         password: "",
-        status: 'Active'
-    }
+        status: "Active",
+    };
 
-    const [showModal, setShowModal] = useState(false)
-    const [users, setUsers] = useState(dataUser)
-    const [formData, setFormData] = useState(_initForm)
-    const [isEdit, setIsEdit] = useState(false)
+    const [showModal, setShowModal] = useState(false);
+    const [users, setUsers] = useState(dataUsers);
+    const [formData, setFormData] = useState(_initForm);
+    const [isEdit, setIsEdit] = useState(false);
 
     const handleOpenModal = () => {
-        setShowModal(true)
-        setShowModal(_initForm)
-        setIsEdit(false)
-    }
+        setShowModal(true);
+        setFormData(_initForm);
+        setIsEdit(false);
+    };
 
     const handleEditModal = (user) => {
-        setShowModal(true)
-        setIsEdit(true)
-        setFormData(user)
-    }
+        console.log(user);
+        setShowModal(true);
+        setIsEdit(true);
+        setFormData(user);
+    };
 
     const handleCloseModal = () => {
-        setShowModal(false)
-    }
+        setShowModal(false);
+    };
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
-        })
-    }
+        });
+    };
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
+        // jika edit data
         if (isEdit) {
-            setUsers(users.map((user) => (user.id === formData.id ? formData : u)))
+            setUsers(users.map((user) => (user.id === formData.id ? formData : user)));
         } else {
             const newUser = {
-                ...formData, id: Date.now(),
-            }
-            setUsers([...users, newUser])
-        }
+                ...formData,
+                id: Date.now(),
+            };
 
-        setShowModal(false)
-    }
+            setUsers([...users, newUser]);
+            setFormData(_initForm);
+        }
+        setShowModal(false);
+    };
 
     const handleDelete = (id) => {
-        const confirmation = window.confirm('are you sure want to delete this data?')
+        const confirmation = window.confirm("Are you sure want to delete this data?");
         if (confirmation) {
-            setUsers(users.filter((u) => u.id !== id))
+            setUsers(users.filter((u) => u.id !== id));
         }
-    }
-    // filter:user
-
-
+        // filter: users
+    };
 
     return (
         <>
-            <Card className="shadow-sm border-0">
-                <CardBody>
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <h4 className="mb-0 fw-bold">Data User</h4>
-                        </div>
-                        <Button variant="primary" onClick={handleOpenModal}>
-                            Create New User
-                        </Button>
+            <Card className="shadow-sm border-border p-6">
+                <CardHeader className="flex flex-row items-center justify-center-between space-y-0 pb-4">
+                    <div>
+                        <CardTitle className="text-xl font-bold">Data User</CardTitle>
                     </div>
-                    <Table responsive hover bordered className="align-middle mb-0">
-                        <thead>
+                    <Button onClick={handleOpenModal}>
+                        Create New User
+                    </Button>
+                </CardHeader>
+                <CardContent className="p-0">
+                    <table className="w-full text-left text-sm">
+                        <thead className="border-y bg-muted/30 text-xs uppercase text-muted-foreground">
                             <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th className="px-6 py-3 font-medium">#</th>
+                                <th className="px-6 py-3 font-medium">Name</th>
+                                <th className="px-6 py-3 font-medium">Email</th>
+                                <th className="px-6 py-3 font-medium">Status</th>
+                                <th className="px-6 py-3 font-medium">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-
-                            {users.map((user, index) => (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{user.name}</td>
-                                    <td>{user.email}</td>
-                                    <td>active</td>
-                                    <td>
-                                        <Button onClick={() => handleEditModal(user)} variant="warning" size="sm" className="me-2">Edit</Button>
-                                        <Button onClick={() => handleDelete(user.id)} variant="danger" size="sm" className="me-2">Delete</Button>
+                        <tbody className="divide-y divide-border">
+                            {users.length > 0 ? (
+                                users.map((user, index) => (
+                                    <tr key={index} className="hover:bg-muted/50 transition-colors">
+                                        <td className="px-4 py-6 whitespace-nowrap">{index + 1}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.status}</td>
+                                        <td className="px-4 py-6 text-right whitespace-nowrap">
+                                            <Button onClick={() => handleEditModal(user)} variant="warning" size="sm" className="me-2">
+                                                Edit
+                                            </Button>
+                                            <Button onClick={() => handleDelete(user.id)} variant="danger" size="sm" className="me-2">
+                                                Delete
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={5} className="text-center py-4 text-muted">
+                                        Belum ada data user
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
-                    </Table>
-                </CardBody>
+                    </table>
+                </CardContent>
             </Card>
 
             {/* <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Create New User</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={handleSubmit}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create New User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Name</Form.Label>
+              <Form.Control type="text" name="name" placeholder="Enter your name" required value={formData.name} onChange={handleChange}></Form.Control>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control value={formData.email} onChange={handleChange} type="email" name="email" placeholder="Enter your email" required></Form.Control>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control value={formData.password} onChange={handleChange} type="password" name="password" placeholder="Enter your passwod" required></Form.Control>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+          <Button type="submit" variant="primary" onClick={handleSubmit}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal> */}
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" name="name" placeholder="Enter Your Name" required
-                                value={formData.name} onChange={handleChange}></Form.Control>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" name="email" placeholder="Enter Your Email" required
-                                value={formData.email} onChange={handleChange}></Form.Control>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" name="password" placeholder="Enter Your Password" required
-                                value={formData.password} onChange={handleChange}></Form.Control>
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
-                    </Button>
-                    <Button type="submit" variant="primary" onClick={handleSubmit}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal> */}
+            {/* <AppModal show={showModal} onClose={() => setShowModal(false)} title={isEdit ? "Edit User" : "Create New User"} onSubmit={handleSubmit} submitLabel={isEdit ? "Save Change" : "Save"}>
+        <h1>tesss</h1>
+          <div className="mb-3">
+            <Label>Name</Label>
+            <Input type="text" name="name" placeholder="Enter your name" required value={formData.name} onChange={handleChange}></Input>
+          </div>
+          <div className="mb-3">
+            <Label>Email</Label>
+            <Input value={formData.email} onChange={handleChange} type="email" name="email" placeholder="Enter your email" required></Input>
+          </div>
+          <div className="mb-3">
+            <Label>Password</Label>
+            <Input value={formData.password} onChange={handleChange} type="password" name="password" placeholder="Enter your passwod" required></Input>
+          </div>
 
-            <AppModal show={showModal}
-                onClose={handleCloseModal}
-                title={isEdit ? "Edit User" : "Create New User"}
-                onSubmit={handleSubmit}
-                submitLabel={isEdit ? 'Save Change' : 'Save'}
-            >
-                
-                    <Form.Group className="mb-3">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" name="name" placeholder="Enter Your Name" required
-                            value={formData.name} onChange={handleChange}></Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" name="email" placeholder="Enter Your Email" required
-                            value={formData.email} onChange={handleChange}></Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" name="password" placeholder="Enter Your Password" required
-                            value={formData.password} onChange={handleChange}></Form.Control>
-                    </Form.Group>
-                
+          <div className="mb-3">
+            <Label>Status</Label>
+            <select name="status" value={formData.status} onChange={handleChange}>
+              <option value="">Select One</option>
+              <option value="Active">Publish</option>
+              <option value="In Active">Draft</option>
+            </select>
+          </div>
+      </AppModal> */}
+            <AppModal show={showModal} onClose={() => setShowModal(false)} title={isEdit ? "Edit User" : "Create New User"} onSubmit={handleSubmit} submitLabel={isEdit ? "Save Change" : "Save"}>
+                <div className="space-y-4">
+                    <div className="space-y-2">
+                        <Label>Name</Label>
+                        <Input id="name" type="text" name="name" placeholder="Enter your name" required value={formData.name} onChange={handleChange} />
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label>Email</Label>
+                    <Input type="email" name="email" placeholder="Enter your email" required value={formData.email} onChange={handleChange} />
+                </div>
+                <div className="space-y-2">
+                    <Label>Password</Label>
+                    <Input type="password" name="password" placeholder="Enter your password" required value={formData.password} onChange={handleChange} />
+                </div>
+
+                <div className="mb-3">
+                    <Label>Status</Label>
+                    <select name="status" value={formData.status} onChange={handleChange}>
+                        <option value="">Select One</option>
+                        <option value="Active">Publish</option>
+                        <option value="In Active">Draft</option>
+                    </select>
+                </div>
             </AppModal>
         </>
-    )
-}
-export default ListUser
+    );
+};
+
+export default ListUser;
